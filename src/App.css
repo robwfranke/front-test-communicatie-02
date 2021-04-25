@@ -1,0 +1,20 @@
+.books{
+    background-color: lightsalmon;
+
+}
+
+.book{
+    background-color: mediumpurple;
+}
+
+
+.post{
+    padding: 20px;
+
+    background-color: yellow;
+}
+
+.delete{
+    padding: 20px;
+    background-color: coral;
+}
