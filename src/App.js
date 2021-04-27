@@ -1,26 +1,32 @@
 import React, {useState, useEffect} from 'react';
 import './App.css';
 import axios from 'axios';
+import jwt_decode from 'jwt-decode';
 
 function App() {
 
     function handleClickHello() {
         console.log("handleclick hello")
         Hello();
-
     }
 
 
     function handleClickJwt() {
         console.log("handleclick Jwt")
         Jwt();
-
     }
 
 
-    const [jwt, setJwt] = useState()
+    function handleClickPeter() {
+        console.log("handleclick Peter")
+        Peter();
+    }
+
+
+    const [jwtToken,SetJwtToken]=useState()
     const [error, setError] = useState("");
     const [baseControllerValue, SetBaseControllerValue] = useState("")
+    const [adminResponse,setAdminResponse]=useState()
 
 
     async function Hello() {
@@ -59,8 +65,7 @@ function App() {
             console.log("result jwt =", result)
             console.log("result.status", result.status)
             console.log("jwt", result.data.jwt)
-            setJwt(result.data.jwt)
-            console.log("jwt", jwt)
+            SetJwtToken(result.data.jwt)
 
         } catch (error) {
             // setError(error.message);
@@ -69,6 +74,60 @@ function App() {
         }
 
     }
+
+
+
+
+
+    async function Peter() {
+
+        console.log("Start try/catch Peter")
+        console.log("jwtkey: ",jwtToken)
+
+        //we hebben de jwt token nodig om daaruit de user id te halen
+        //Hier gebruiken we de package npm install jwt-deco
+        //en importeren!!!
+        const decoded = jwt_decode(jwtToken);
+        // const userId = decoded.sub;
+        const userId= decoded.sub
+        console.log('AuthContext jwt DECODED', decoded);
+        console.log("userId: ",userId)
+       const x = "Bearer " + jwtToken
+        console.log(x)
+
+        try {
+
+            const response = await axios.get(`http://localhost:8080/users/${userId}`, {
+                //    authorisaton header, object key bevat -, daarom ""
+                headers: {
+                    "Content-Type": "application/json",
+                    // Authorization: `Bearer ${jwtToken}`, /*BACK TICK!!!!!*/
+                    Authorization: `{x}`
+                }
+            })
+
+
+        } catch (error) {
+            // setError(error.message);
+            setError("Er is iets mis gegaan met het ophalen");
+            console.error(error);
+        }
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     return (
@@ -94,7 +153,19 @@ function App() {
                 >
                     Get jwt token
                 </button>
-                {/*<span>{jwt}</span>*/}
+                <span>{jwtToken}</span>
+            </div>
+
+
+
+            <div className="peter">
+                <button
+                    type="button"
+                    onClick={handleClickPeter}
+                >
+                    Get user Peter
+                </button>
+                <span></span>
             </div>
 
 
