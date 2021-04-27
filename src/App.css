@@ -1,20 +1,12 @@
-.books{
-    background-color: lightsalmon;
 
-}
-
-.book{
-    background-color: mediumpurple;
-}
-
-
-.post{
+.jwt{
     padding: 20px;
 
-    background-color: yellow;
+    background-color: red;
 }
 
-.delete{
+.base{
     padding: 20px;
-    background-color: coral;
+
+    background-color: orange;
 }

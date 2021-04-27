@@ -4,64 +4,37 @@ import axios from 'axios';
 
 function App() {
 
-    function handleClick() {
-        console.log("handleclick")
-        fetchDataBooks();
+    function handleClickHello() {
+        console.log("handleclick hello")
+        Hello();
 
     }
 
 
-    function handleClickSingleBook() {
-        console.log("handleclick single book")
-        fetchDataJwt();
-
-    }
 
 
     function handleClickJwt() {
-        console.log("handleclick post book")
-        PostBook();
-
-    }
-
-    function handleClickDeleteBook() {
-        console.log("handleclick delete book")
-        DeleteBook();
+        console.log("handleclick Jwt")
+        Jwt();
 
     }
 
 
-    const [books, setBooks] = useState([]);/*array van books*/
-    const [single, setSingle] = useState('')
+
     const [jwt,setJwt]=useState()
     const [error, setError] = useState("");
-    const [halen, ToggleHalen] = useState(false)
+const [baseControllerValue,SetBaseControllerValue]=useState("")
 
 
-    async function fetchDataBooks() {
+
+
+    async function Hello() {
         try {
-            console.log("Start try/catch")
-            const result = await axios.get("http://localhost:8080/books")
-            setBooks(result.data)
-            // console.log("result",result)
-            // console.log("books",books)
+            console.log("Start try/catch hello")
 
-        } catch (error) {
-            // setError(error.message);
-            setError("Er is iets mis gegaan met het ophalen");
-            console.error(error);
-        }
-    }
-
-    async function fetchDataJwt() {
-        try {
-            console.log("Start try/catch Single")
-            const {data: {title}} = await axios.get("http://localhost:8080/books/1")
-            console.log("title =", title)
-            setSingle(title);
-
-
-            console.log("result singlebook", single)
+               const result = await axios.get("http://localhost:8080/");
+            console.log(result.data)
+            SetBaseControllerValue(result.data)
 
         } catch (error) {
             // setError(error.message);
@@ -69,19 +42,22 @@ function App() {
             console.error(error);
         }
 
-
     }
 
 
-    async function PostBook() {
+
+
+
+    async function Jwt() {
         try {
             console.log("Start try/catch jwt")
 
-            const dataJwt = {
-               username: 'peter',
-                password:'password'
-
-            }
+            const dataJwt = JSON.stringify(
+                {
+                    username: 'peter',
+                    password: 'password'
+                }
+        );
 
             console.log("dataJwt=", dataJwt)
             const result = await axios.post("http://localhost:8080/authenticate", dataJwt);
@@ -99,63 +75,26 @@ function App() {
 
     }
 
-    async function DeleteBook() {
-        try {
-            console.log("Start try/catch Delete")
-            const result = await axios.delete("http://localhost:8080/books/2")
-            console.log("result post =", result)
-            console.log("result.status", result.status)
-
-
-        } catch (error) {
-            // setError(error.message);
-            setError("Er is iets mis gegaan met het ophalen");
-            console.error(error);
-        }
-
-
-    }
 
 
     return (
 
         <>
-            <div className="books">
-                <ul>
-
-                    {/* loader kan ook met button (niets met deze app te maken, gewoon voorbeeld*/}
-
-                    <button
-                        type="button"
-                        onClick={handleClick}
-                    >
-                        Haal data op
-                        {/*{loading ?<LoadingIcon className="loader"/>:<>Versturen</>}*/}
-                    </button>
-                </ul>
-
-                <p>lijst met boeken, evt ternaire operator gebruiken</p>
-                <p>aantal boeken {books.length}</p>
-                {books && books.map((book) => {
-                    console.log("book titel", book.title)
-                    return <li key={book.id}>
-                        <span> boek {book.title}</span>
-                    </li>
-                })}
-            </div>
 
 
-            <div className="book">
+
+            <div className="base">
                 <button
                     type="button"
-                    onClick={handleClickSingleBook}
+                    onClick={handleClickHello}
                 >
-                    Haal data van 1 book op
+                    BaseController
                 </button>
-                <p>opgevraagd boek {single}</p>
+                <span>{baseControllerValue}</span>
             </div>
 
-            <div className="post">
+
+            <div className="jwt">
                 <button
                     type="button"
                     onClick={handleClickJwt}
@@ -166,15 +105,6 @@ function App() {
             </div>
 
 
-            <div className="delete">
-
-                <button
-                    type="button"
-                    onClick={handleClickDeleteBook}
-                >
-                    delete book
-                </button>
-            </div>
 
 
         </>
