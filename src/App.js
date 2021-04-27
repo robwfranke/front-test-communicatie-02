@@ -11,8 +11,6 @@ function App() {
     }
 
 
-
-
     function handleClickJwt() {
         console.log("handleclick Jwt")
         Jwt();
@@ -20,19 +18,16 @@ function App() {
     }
 
 
-
-    const [jwt,setJwt]=useState()
+    const [jwt, setJwt] = useState()
     const [error, setError] = useState("");
-const [baseControllerValue,SetBaseControllerValue]=useState("")
-
-
+    const [baseControllerValue, SetBaseControllerValue] = useState("")
 
 
     async function Hello() {
         try {
             console.log("Start try/catch hello")
 
-               const result = await axios.get("http://localhost:8080/");
+            const result = await axios.get("http://localhost:8080/");
             console.log(result.data)
             SetBaseControllerValue(result.data)
 
@@ -45,27 +40,27 @@ const [baseControllerValue,SetBaseControllerValue]=useState("")
     }
 
 
-
-
-
     async function Jwt() {
         try {
             console.log("Start try/catch jwt")
 
-            const dataJwt = JSON.stringify(
+            // const dataJwt = JSON.stringify(
+            const dataJwt=
                 {
-                    username: 'peter',
-                    password: 'password'
+                    username: "peter",
+                    password: "password"
                 }
-        );
+            ;
+
+
 
             console.log("dataJwt=", dataJwt)
             const result = await axios.post("http://localhost:8080/authenticate", dataJwt);
             console.log("result jwt =", result)
             console.log("result.status", result.status)
-            console.log("jwt",result.data.jwt)
+            console.log("jwt", result.data.jwt)
             setJwt(result.data.jwt)
-            console.log("jwt",jwt)
+            console.log("jwt", jwt)
 
         } catch (error) {
             // setError(error.message);
@@ -76,11 +71,9 @@ const [baseControllerValue,SetBaseControllerValue]=useState("")
     }
 
 
-
     return (
 
         <>
-
 
 
             <div className="base">
@@ -103,8 +96,6 @@ const [baseControllerValue,SetBaseControllerValue]=useState("")
                 </button>
                 {/*<span>{jwt}</span>*/}
             </div>
-
-
 
 
         </>
