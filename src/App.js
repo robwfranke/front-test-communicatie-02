@@ -19,15 +19,31 @@ function App() {
 
     function handleClickPeter() {
         console.log("handleclick Peter")
-        Peter();
+        console.log("jwt:",jwtToken)
+        if(jwtToken){
+        Peter()
+        }else{
+            console.log("geen token")
+        };
+    }
+
+    function handleClickAdmin() {
+        console.log("handleclick Admin")
+        if(jwtToken){
+            Admin();
+        }else{
+            console.log("geen token")
+        };
+
+
     }
 
 
-    const [jwtToken,SetJwtToken]=useState()
+    const [jwtToken, SetJwtToken] = useState()
     const [error, setError] = useState("");
     const [baseControllerValue, SetBaseControllerValue] = useState("")
-    const [adminResponse,setAdminResponse]=useState()
-
+    const [adminResponse, setAdminResponse] = useState()
+const [peter,SetPeter]=useState()
 
     async function Hello() {
         try {
@@ -51,13 +67,12 @@ function App() {
             console.log("Start try/catch jwt")
 
             // const dataJwt = JSON.stringify(
-            const dataJwt=
+            const dataJwt =
                 {
                     username: "peter",
                     password: "password"
                 }
             ;
-
 
 
             console.log("dataJwt=", dataJwt)
@@ -76,36 +91,30 @@ function App() {
     }
 
 
-
-
-
     async function Peter() {
-
+    //
         console.log("Start try/catch Peter")
-        console.log("jwtkey: ",jwtToken)
-
-        //we hebben de jwt token nodig om daaruit de user id te halen
-        //Hier gebruiken we de package npm install jwt-deco
-        //en importeren!!!
+        console.log("jwtkey: ", jwtToken)
+    //
+    //     //we hebben de jwt token nodig om daaruit de user id te halen
+    //     //Hier gebruiken we de package npm install jwt-deco
+    //     //en importeren!!!
         const decoded = jwt_decode(jwtToken);
         // const userId = decoded.sub;
-        const userId= decoded.sub
+        const userId = decoded.sub
         console.log('AuthContext jwt DECODED', decoded);
-        console.log("userId: ",userId)
-       const x = "Bearer " + jwtToken
-        console.log(x)
+        console.log("userId: ", userId)
 
         try {
-
-            const response = await axios.get(`http://localhost:8080/users/${userId}`, {
-                //    authorisaton header, object key bevat -, daarom ""
+                const response = await axios.get(`http://localhost:8080/users/${userId}`, {
                 headers: {
                     "Content-Type": "application/json",
-                    // Authorization: `Bearer ${jwtToken}`, /*BACK TICK!!!!!*/
-                    Authorization: `{x}`
+                    Authorization: `Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwZXRlciIsImV4cCI6MTYyMDQxNTEwOCwiaWF0IjoxNjE5NTUxMTA4fQ.peaheJXlBhDk8d1yK0d27UYS7VsXfuSVm4vJST5bfRo`,
+
                 }
             })
-
+            console.log("response: ", response)
+            SetPeter(response.data)
 
         } catch (error) {
             // setError(error.message);
@@ -115,12 +124,29 @@ function App() {
 
     }
 
+    async function Admin() {
+        try {
+            console.log("Start try/catch admin")
+            console.log("jwtkey: ", jwtToken)
 
 
+            const response = await axios.get(`http://localhost:8080/admin`, {
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwZXRlciIsImV4cCI6MTYyMDQxNTEwOCwiaWF0IjoxNjE5NTUxMTA4fQ.peaheJXlBhDk8d1yK0d27UYS7VsXfuSVm4vJST5bfRo`,
 
+                }
+            })
+            console.log("admin: ",response)
+            setAdminResponse(response.data)
 
+        } catch (error) {
+            // setError(error.message);
+            setError("Er is iets mis gegaan met het ophalen");
+            console.error(error);
+        }
 
-
+    }
 
 
 
@@ -157,7 +183,6 @@ function App() {
             </div>
 
 
-
             <div className="peter">
                 <button
                     type="button"
@@ -165,9 +190,19 @@ function App() {
                 >
                     Get user Peter
                 </button>
-                <span></span>
+                {/*<span>Username: {peter.username}</span>*/}
+                {/*<div>Password: {peter.password}</div>*/}
             </div>
 
+            <div className="admin">
+                <button
+                    type="button"
+                    onClick={handleClickAdmin}
+                >
+                    Get admin
+                </button>
+                <span>Username: {adminResponse}</span>
+            </div>
 
         </>
 
