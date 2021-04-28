@@ -19,21 +19,35 @@ function App() {
 
     function handleClickPeter() {
         console.log("handleclick Peter")
-        console.log("jwt:",jwtToken)
-        if(jwtToken){
-        Peter()
-        }else{
+        console.log("jwt:", jwtToken)
+        if (jwtToken) {
+            Peter()
+        } else {
             console.log("geen token")
-        };
+        }
+        ;
     }
 
     function handleClickAdmin() {
         console.log("handleclick Admin")
-        if(jwtToken){
+        if (jwtToken) {
             Admin();
-        }else{
+        } else {
             console.log("geen token")
-        };
+        }
+        ;
+
+
+    }
+
+    function handleClickAddUser() {
+        console.log("handleclick AddUser")
+        if (jwtToken) {
+            AddUser();
+        } else {
+            console.log("geen token")
+        }
+        ;
 
 
     }
@@ -43,7 +57,7 @@ function App() {
     const [error, setError] = useState("");
     const [baseControllerValue, SetBaseControllerValue] = useState("")
     const [adminResponse, setAdminResponse] = useState()
-const [peter,SetPeter]=useState()
+    const [peter, SetPeter] = useState()
 
     async function Hello() {
         try {
@@ -92,13 +106,13 @@ const [peter,SetPeter]=useState()
 
 
     async function Peter() {
-    //
+        //
         console.log("Start try/catch Peter")
         console.log("jwtkey: ", jwtToken)
-    //
-    //     //we hebben de jwt token nodig om daaruit de user id te halen
-    //     //Hier gebruiken we de package npm install jwt-deco
-    //     //en importeren!!!
+        //
+        //     //we hebben de jwt token nodig om daaruit de user id te halen
+        //     //Hier gebruiken we de package npm install jwt-deco
+        //     //en importeren!!!
         const decoded = jwt_decode(jwtToken);
         // const userId = decoded.sub;
         const userId = decoded.sub
@@ -106,7 +120,7 @@ const [peter,SetPeter]=useState()
         console.log("userId: ", userId)
 
         try {
-                const response = await axios.get(`http://localhost:8080/users/${userId}`, {
+            const response = await axios.get(`http://localhost:8080/users/${userId}`, {
                 headers: {
                     "Content-Type": "application/json",
                     Authorization: `Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwZXRlciIsImV4cCI6MTYyMDQxNTEwOCwiaWF0IjoxNjE5NTUxMTA4fQ.peaheJXlBhDk8d1yK0d27UYS7VsXfuSVm4vJST5bfRo`,
@@ -137,7 +151,7 @@ const [peter,SetPeter]=useState()
 
                 }
             })
-            console.log("admin: ",response)
+            console.log("admin: ", response)
             setAdminResponse(response.data)
 
         } catch (error) {
@@ -149,11 +163,38 @@ const [peter,SetPeter]=useState()
     }
 
 
+    async function AddUser() {
+
+        var dataNewUser = {
+            username: "24",
+            password: "123456",
+            enabled: "true"
+        };
 
 
 
 
+        try {
+            console.log("Start try/catch adduser")
+            const response = await axios.post(`http://localhost:8080/users`, {
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwZXRlciIsImV4cCI6MTYyMDQxNTEwOCwiaWF0IjoxNjE5NTUxMTA4fQ.peaheJXlBhDk8d1yK0d27UYS7VsXfuSVm4vJST5bfRo`,
 
+                },
+                data:dataNewUser
+            })
+            // console.log("addUser: ", response)
+            // setAdminResponse(response.data)
+
+
+        } catch (error) {
+            // setError(error.message);
+            setError("Er is iets mis gegaan met het ophalen");
+            console.error(error);
+        }
+
+    }
 
 
     return (
@@ -203,6 +244,18 @@ const [peter,SetPeter]=useState()
                 </button>
                 <span>Username: {adminResponse}</span>
             </div>
+
+
+            <div className="addUser">
+                <button
+                    type="button"
+                    onClick={handleClickAddUser}
+                >
+                    Add new user
+                </button>
+                {/*<span>Username: {adminResponse}</span>*/}
+            </div>
+
 
         </>
 
