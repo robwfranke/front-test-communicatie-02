@@ -48,9 +48,30 @@ function App() {
             console.log("geen token")
         }
         ;
-
-
     }
+
+
+
+    function handleClickChangeUser() {
+        console.log("handleclick ChangeUser")
+        if (jwtToken) {
+            ChangeUser();
+        } else {
+            console.log("geen token")
+        }
+        ;
+    }
+    function handleClickDeleteUser() {
+        console.log("handleclick AddUser")
+        if (jwtToken) {
+           DeleteUser();
+        } else {
+            console.log("geen token")
+        }
+        ;
+    }
+
+
 
 
     const [jwtToken, SetJwtToken] = useState()
@@ -58,6 +79,7 @@ function App() {
     const [baseControllerValue, SetBaseControllerValue] = useState("")
     const [adminResponse, setAdminResponse] = useState()
     const [peter, SetPeter] = useState()
+    const [usernameAddUser,setUsernameAddUser]=useState("35")
 
     async function Hello() {
         try {
@@ -123,7 +145,7 @@ function App() {
             const response = await axios.get(`http://localhost:8080/users/${userId}`, {
                 headers: {
                     "Content-Type": "application/json",
-                    Authorization: `Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwZXRlciIsImV4cCI6MTYyMDQxNTEwOCwiaWF0IjoxNjE5NTUxMTA4fQ.peaheJXlBhDk8d1yK0d27UYS7VsXfuSVm4vJST5bfRo`,
+                    Authorization: `Bearer ${jwtToken}`, /*BACK TICK!!!!!*/
 
                 }
             })
@@ -147,7 +169,7 @@ function App() {
             const response = await axios.get(`http://localhost:8080/admin`, {
                 headers: {
                     "Content-Type": "application/json",
-                    Authorization: `Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwZXRlciIsImV4cCI6MTYyMDQxNTEwOCwiaWF0IjoxNjE5NTUxMTA4fQ.peaheJXlBhDk8d1yK0d27UYS7VsXfuSVm4vJST5bfRo`,
+                    Authorization: `Bearer ${jwtToken}`, /*BACK TICK!!!!!*/
 
                 }
             })
@@ -165,35 +187,25 @@ function App() {
 
     async function AddUser() {
 
-       const dataNewUser = {
-            username: "29",
+
+        const dataNewUser = {
+            username: usernameAddUser,
             password: "1234567",
             enabled: "true"
         };
 
-
-
-
         try {
             console.log("Start try/catch adduser")
-            // const response = await axios.post(`http://localhost:8080/users`, {
-            //     headers: {
-            //         "Content-Type": "application/json",
-            //         Authorization: `Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwZXRlciIsImV4cCI6MTYyMDQxNTEwOCwiaWF0IjoxNjE5NTUxMTA4fQ.peaheJXlBhDk8d1yK0d27UYS7VsXfuSVm4vJST5bfRo`,
-            //
-            //     },
-            //     data:dataNewUser
-            // })
-            // console.log("addUser: ", response)
-            // setAdminResponse(response.data)
-            const response = await axios.post(`http://localhost:8080/users`, dataNewUser,{
+
+            const response = await axios.post(`http://localhost:8080/users`, dataNewUser, {
                 headers: {
                     "Content-Type": "application/json",
-                    Authorization: `Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwZXRlciIsImV4cCI6MTYyMDQ5OTU4MSwiaWF0IjoxNjE5NjM1NTgxfQ.oVLhAcJRDQBWggIolH1CaNInMW-aN_Uz9f462ciXt9E`
+                    // Authorization: `Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwZXRlciIsImV4cCI6MTYyMDQ5OTU4MSwiaWF0IjoxNjE5NjM1NTgxfQ.oVLhAcJRDQBWggIolH1CaNInMW-aN_Uz9f462ciXt9E`
+                    Authorization: `Bearer ${jwtToken}`, /*BACK TICK!!!!!*/
                 }
             })
 
-            console.log("user: ",response)
+            console.log("user: ", response)
 
         } catch (error) {
             // setError(error.message);
@@ -202,6 +214,73 @@ function App() {
         }
 
     }
+
+    async function ChangeUser() {
+
+
+        const dataNewUser = {
+            username: usernameAddUser,
+            // username: "35",
+            password: "65432tt1",
+            enabled: "true"
+        };
+
+        try {
+            console.log("Start try/catch addUser")
+            console.log("dataNewUser: ", dataNewUser)
+
+            const response = await axios.put(`http://localhost:8080/users/${usernameAddUser}`, dataNewUser, {
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${jwtToken}`, /*BACK TICK!!!!!*/
+                }
+            })
+
+            console.log("user: ", response)
+
+        } catch (error) {
+            // setError(error.message);
+            setError("Er is iets mis gegaan met het ophalen");
+            console.error(error);
+        }
+
+    }
+
+
+
+
+
+
+
+    async function DeleteUser() {
+
+        // haalt username uit addUser
+
+
+        try {
+            console.log("Start try/catch deleteUser")
+            console.log("jwt:",jwtToken)
+
+            const response = await axios.delete(`http://localhost:8080/users/${usernameAddUser}`, {
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${jwtToken}` /*BACK TICK!!!!!*/
+                }
+            })
+
+
+
+            console.log("user: ", response)
+
+        } catch (error) {
+            // setError(error.message);
+            setError("Er is iets mis gegaan met het ophalen");
+            console.error(error);
+        }
+
+    }
+
+
 
 
     return (
@@ -230,18 +309,6 @@ function App() {
                 <span>{jwtToken}</span>
             </div>
 
-
-            <div className="peter">
-                <button
-                    type="button"
-                    onClick={handleClickPeter}
-                >
-                    Get user Peter
-                </button>
-               {peter &&  <div>Username: {peter.username}</div>}
-               {peter &&  <div>Username: {peter.password}</div>}
-            </div>
-
             <div className="admin">
                 <button
                     type="button"
@@ -253,12 +320,49 @@ function App() {
             </div>
 
 
+
+
+            <div className="peter">
+                <button
+                    type="button"
+                    onClick={handleClickPeter}
+                >
+                    Get user Peter
+                </button>
+                {peter && <div>Username: {peter.username}</div>}
+                {peter && <div>Username: {peter.password}</div>}
+            </div>
+
+
+
+
             <div className="addUser">
                 <button
                     type="button"
                     onClick={handleClickAddUser}
                 >
-                    Add new user
+                    Add new user     <span>{usernameAddUser}</span>
+                </button>
+            </div>
+
+            <div className="changeUser">
+                <button
+                    type="button"
+                    onClick={handleClickChangeUser}
+                >
+                    change user     <span>{usernameAddUser}</span>
+                </button>
+            </div>
+
+
+
+
+            <div className="deleteUser">
+                <button
+                    type="button"
+                    onClick={handleClickDeleteUser}
+                >
+                    Delete user  <span>{usernameAddUser}</span>
                 </button>
                 {/*<span>Username: {adminResponse}</span>*/}
             </div>

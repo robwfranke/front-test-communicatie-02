@@ -30,3 +30,17 @@
 
     background-color: green;
 }
+
+.changeUser{
+    padding: 20px;
+
+    background-color: magenta;
+}
+
+
+
+.deleteUser{
+    padding: 20px;
+
+    background-color: cornflowerblue;
+}
