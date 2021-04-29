@@ -165,9 +165,9 @@ function App() {
 
     async function AddUser() {
 
-        var dataNewUser = {
-            username: "24",
-            password: "123456",
+       const dataNewUser = {
+            username: "29",
+            password: "1234567",
             enabled: "true"
         };
 
@@ -176,17 +176,24 @@ function App() {
 
         try {
             console.log("Start try/catch adduser")
-            const response = await axios.post(`http://localhost:8080/users`, {
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwZXRlciIsImV4cCI6MTYyMDQxNTEwOCwiaWF0IjoxNjE5NTUxMTA4fQ.peaheJXlBhDk8d1yK0d27UYS7VsXfuSVm4vJST5bfRo`,
-
-                },
-                data:dataNewUser
-            })
+            // const response = await axios.post(`http://localhost:8080/users`, {
+            //     headers: {
+            //         "Content-Type": "application/json",
+            //         Authorization: `Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwZXRlciIsImV4cCI6MTYyMDQxNTEwOCwiaWF0IjoxNjE5NTUxMTA4fQ.peaheJXlBhDk8d1yK0d27UYS7VsXfuSVm4vJST5bfRo`,
+            //
+            //     },
+            //     data:dataNewUser
+            // })
             // console.log("addUser: ", response)
             // setAdminResponse(response.data)
+            const response = await axios.post(`http://localhost:8080/users`, dataNewUser,{
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwZXRlciIsImV4cCI6MTYyMDQ5OTU4MSwiaWF0IjoxNjE5NjM1NTgxfQ.oVLhAcJRDQBWggIolH1CaNInMW-aN_Uz9f462ciXt9E`
+                }
+            })
 
+            console.log("user: ",response)
 
         } catch (error) {
             // setError(error.message);
@@ -231,8 +238,8 @@ function App() {
                 >
                     Get user Peter
                 </button>
-                {/*<span>Username: {peter.username}</span>*/}
-                {/*<div>Password: {peter.password}</div>*/}
+               {peter &&  <div>Username: {peter.username}</div>}
+               {peter &&  <div>Username: {peter.password}</div>}
             </div>
 
             <div className="admin">
