@@ -51,6 +51,21 @@ function App() {
         ;
     }
 
+    function handleClickAllAuthorities() {
+        console.log("handleclick AllAuthorities")
+        if (jwtToken) {
+            console.log()
+            AllAuthorities();
+        } else {
+            console.log("geen token")
+        }
+        ;
+    }
+
+
+
+
+
     function handleClickAddUser() {
         console.log("handleclick AddUser")
         if (jwtToken) {
@@ -100,6 +115,7 @@ function App() {
     const [peter, SetPeter] = useState()
     const [usernameAddUser, setUsernameAddUser] = useState("newUser")
     const [allUsersData, setAllUsersData] = useState()
+    const [allAuthoritiesData, setAllAuthoritiesData] = useState()
 
 
     async function Hello() {
@@ -233,6 +249,44 @@ function App() {
         }
 
     }
+
+
+
+    async function AllAuthorities() {
+        try {
+            console.log("Start try/catch AllAuthorities")
+            console.log("jwtkey: ", jwtToken)
+
+
+            const response = await axios.get(`http://localhost:8080/users/authorities`, {
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${jwtToken}`, /*BACK TICK!!!!!*/
+
+                }
+            })
+
+
+            console.log("authorities: ",response)
+            console.log()
+            const test = response.data
+
+
+            setAllAuthoritiesData(response.data)
+
+        } catch (error) {
+            // setError(error.message);
+            setError("Er is iets mis gegaan met het ophalen");
+            console.error(error);
+        }
+
+    }
+
+
+
+
+
+
 
 
     async function AddUser() {
@@ -417,9 +471,38 @@ function App() {
                     </ul>
                     }
                 </div>
-
-
             </div>
+
+
+
+
+            <div className="allUsers">
+                <button
+                    type="button"
+                    onClick={handleClickAllAuthorities}
+                >
+                    Get all authorities
+                </button>
+
+
+                <div>
+                    {allAuthoritiesData &&
+                    <ul>
+                        {allAuthoritiesData.map((user) => {
+                            return <li key={user.username}> username: {user.username}
+                                {/*<div> password: {user.password}</div>*/}
+                            </li>
+                        })}
+                    </ul>
+                    }
+                </div>
+            </div>
+
+
+
+
+
+
 
 
             <div className="peter">
