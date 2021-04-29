@@ -49,8 +49,6 @@ function App() {
             console.log("geen token")
         }
         ;
-
-
     }
 
     function handleClickAddUser() {
@@ -273,7 +271,7 @@ function App() {
 
         const dataNewUser = {
             username: usernameAddUser,
-            authority:"ROLE_ADMIN",
+            authority:"ROLE_USER",
 
         };
 
