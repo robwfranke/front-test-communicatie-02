@@ -19,7 +19,6 @@ function App() {
 
     function handleClickPeter() {
         console.log("handleclick Peter")
-        console.log("jwt:", jwtToken)
         if (jwtToken) {
             Peter()
         } else {
@@ -40,6 +39,20 @@ function App() {
 
     }
 
+
+    function handleClickAllUsers() {
+        console.log("handleclick Allusers")
+        if (jwtToken) {
+            console.log()
+            AllUsers();
+        } else {
+            console.log("geen token")
+        }
+        ;
+
+
+    }
+
     function handleClickAddUser() {
         console.log("handleclick AddUser")
         if (jwtToken) {
@@ -51,7 +64,6 @@ function App() {
     }
 
 
-
     function handleClickChangeUser() {
         console.log("handleclick ChangeUser")
         if (jwtToken) {
@@ -61,10 +73,11 @@ function App() {
         }
         ;
     }
+
     function handleClickDeleteUser() {
         console.log("handleclick AddUser")
         if (jwtToken) {
-           DeleteUser();
+            DeleteUser();
         } else {
             console.log("geen token")
         }
@@ -72,14 +85,14 @@ function App() {
     }
 
 
-
-
     const [jwtToken, SetJwtToken] = useState()
     const [error, setError] = useState("");
     const [baseControllerValue, SetBaseControllerValue] = useState("")
     const [adminResponse, setAdminResponse] = useState()
     const [peter, SetPeter] = useState()
-    const [usernameAddUser,setUsernameAddUser]=useState("35")
+    const [usernameAddUser, setUsernameAddUser] = useState("newUser")
+    const [allUsersData, setAllUsersData] = useState()
+
 
     async function Hello() {
         try {
@@ -185,6 +198,35 @@ function App() {
     }
 
 
+    async function AllUsers() {
+        try {
+            console.log("Start try/catch allUsers")
+            console.log("jwtkey: ", jwtToken)
+
+
+            const response = await axios.get(`http://localhost:8080/users`, {
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${jwtToken}`, /*BACK TICK!!!!!*/
+
+                }
+            })
+
+            const test = response.data
+
+            console.log("test: ", test)
+            setAllUsersData(response.data)
+
+
+        } catch (error) {
+            // setError(error.message);
+            setError("Er is iets mis gegaan met het ophalen");
+            console.error(error);
+        }
+
+    }
+
+
     async function AddUser() {
 
 
@@ -247,11 +289,6 @@ function App() {
     }
 
 
-
-
-
-
-
     async function DeleteUser() {
 
         // haalt username uit addUser
@@ -259,7 +296,7 @@ function App() {
 
         try {
             console.log("Start try/catch deleteUser")
-            console.log("jwt:",jwtToken)
+            console.log("jwt:", jwtToken)
 
             const response = await axios.delete(`http://localhost:8080/users/${usernameAddUser}`, {
                 headers: {
@@ -269,8 +306,8 @@ function App() {
             })
 
 
-
             console.log("user: ", response)
+
 
         } catch (error) {
             // setError(error.message);
@@ -279,8 +316,6 @@ function App() {
         }
 
     }
-
-
 
 
     return (
@@ -320,6 +355,31 @@ function App() {
             </div>
 
 
+            <div className="allUsers">
+                <button
+                    type="button"
+                    onClick={handleClickAllUsers}
+                >
+                    Get all users
+                </button>
+
+
+                <div>
+                    {allUsersData &&
+                    <ul>
+
+                        {allUsersData.map((user) => {
+                            return <li key={user.username}> username: {user.username}
+                                <div> password: {user.password}</div>
+                            </li>
+                            // return <li key={user.username}> username: {user.username}</li>
+                        })}
+                    </ul>
+                    }
+                </div>
+
+
+            </div>
 
 
             <div className="peter">
@@ -334,14 +394,12 @@ function App() {
             </div>
 
 
-
-
             <div className="addUser">
                 <button
                     type="button"
                     onClick={handleClickAddUser}
                 >
-                    Add new user     <span>{usernameAddUser}</span>
+                    Add new user <span>{usernameAddUser}</span>
                 </button>
             </div>
 
@@ -350,11 +408,9 @@ function App() {
                     type="button"
                     onClick={handleClickChangeUser}
                 >
-                    change user     <span>{usernameAddUser}</span>
+                    change user <span>{usernameAddUser}</span>
                 </button>
             </div>
-
-
 
 
             <div className="deleteUser">
@@ -362,7 +418,7 @@ function App() {
                     type="button"
                     onClick={handleClickDeleteUser}
                 >
-                    Delete user  <span>{usernameAddUser}</span>
+                    Delete user <span>{usernameAddUser}</span>
                 </button>
                 {/*<span>Username: {adminResponse}</span>*/}
             </div>
