@@ -63,6 +63,16 @@ function App() {
         ;
     }
 
+    function handleClickAddUserAuthorityRoleUser() {
+        console.log("handleclick AddUserAuthorityRoleUser")
+        if (jwtToken) {
+            AddUserAuthorityRoleUser();
+        } else {
+            console.log("geen token")
+        }
+        ;
+    }
+
 
     function handleClickChangeUser() {
         console.log("handleclick ChangeUser")
@@ -257,6 +267,40 @@ function App() {
 
     }
 
+
+    async function AddUserAuthorityRoleUser() {
+
+
+        const dataNewUser = {
+            username: usernameAddUser,
+            authority:"ROLE_ADMIN",
+
+        };
+
+        try {
+            console.log("Start try/catch AddUserAuthorityRoleUser")
+
+            const response = await axios.post(`http://localhost:8080/users/${usernameAddUser}/authorities`, dataNewUser, {
+                headers: {
+                    "Content-Type": "application/json",
+                    // Authorization: `Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwZXRlciIsImV4cCI6MTYyMDQ5OTU4MSwiaWF0IjoxNjE5NjM1NTgxfQ.oVLhAcJRDQBWggIolH1CaNInMW-aN_Uz9f462ciXt9E`
+                    Authorization: `Bearer ${jwtToken}`, /*BACK TICK!!!!!*/
+                }
+            })
+
+            console.log("user: ", response)
+
+        } catch (error) {
+            // setError(error.message);
+            setError("Er is iets mis gegaan met het ophalen");
+            console.error(error);
+        }
+
+    }
+
+
+
+
     async function ChangeUser() {
 
 
@@ -367,12 +411,10 @@ function App() {
                 <div>
                     {allUsersData &&
                     <ul>
-
                         {allUsersData.map((user) => {
                             return <li key={user.username}> username: {user.username}
                                 <div> password: {user.password}</div>
                             </li>
-                            // return <li key={user.username}> username: {user.username}</li>
                         })}
                     </ul>
                     }
@@ -402,6 +444,19 @@ function App() {
                     Add new user <span>{usernameAddUser}</span>
                 </button>
             </div>
+
+
+
+
+            <div className="addUserAuthorityRoleUse">
+                <button
+                    type="button"
+                    onClick={ handleClickAddUserAuthorityRoleUser}
+                >
+                    Add ROLE_USER to authority <span>{usernameAddUser}</span>
+                </button>
+            </div>
+
 
             <div className="changeUser">
                 <button
