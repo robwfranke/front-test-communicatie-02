@@ -1,7 +1,13 @@
 *{
     width: 200px;
+}
+.error{
+    font-size: 15px;
+    background-color: red;
+    color: black;
 
 }
+
 .jwt{
 
     padding: 20px;

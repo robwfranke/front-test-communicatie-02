@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import './App.css';
 import axios from 'axios';
 import jwt_decode from 'jwt-decode';
-import { v4 as uuidv4 } from 'uuid';
+import {v4 as uuidv4} from 'uuid';
 
 
 function App() {
@@ -65,9 +65,6 @@ function App() {
     }
 
 
-
-
-
     function handleClickAddUser() {
         console.log("handleclick AddUser")
         if (jwtToken) {
@@ -115,13 +112,15 @@ function App() {
     const [baseControllerValue, SetBaseControllerValue] = useState("")
     const [adminResponse, setAdminResponse] = useState()
     const [peter, SetPeter] = useState()
-    const [usernameAddUser, setUsernameAddUser] = useState("newUser")
+    const [usernameAddUser, setUsernameAddUser] = useState("newUser1")
     const [allUsersData, setAllUsersData] = useState()
     const [allAuthoritiesData, setAllAuthoritiesData] = useState()
+    const [errorMessage, setErrorMessage] = useState()
 
 
     async function Hello() {
         try {
+            setErrorMessage()
             console.log("Start try/catch hello")
 
             const result = await axios.get("http://localhost:8080/");
@@ -139,6 +138,7 @@ function App() {
 
     async function Jwt() {
         try {
+            setErrorMessage()
             console.log("Start try/catch jwt")
 
             // const dataJwt = JSON.stringify(
@@ -167,13 +167,10 @@ function App() {
 
 
     async function Peter() {
-        //
+
         console.log("Start try/catch Peter")
         console.log("jwtkey: ", jwtToken)
-        //
-        //     //we hebben de jwt token nodig om daaruit de user id te halen
-        //     //Hier gebruiken we de package npm install jwt-deco
-        //     //en importeren!!!
+
         const decoded = jwt_decode(jwtToken);
         // const userId = decoded.sub;
         const userId = decoded.sub
@@ -181,6 +178,7 @@ function App() {
         console.log("userId: ", userId)
 
         try {
+            setErrorMessage()
             const response = await axios.get(`http://localhost:8080/users/${userId}`, {
                 headers: {
                     "Content-Type": "application/json",
@@ -201,6 +199,7 @@ function App() {
 
     async function Admin() {
         try {
+            setErrorMessage()
             console.log("Start try/catch admin")
             console.log("jwtkey: ", jwtToken)
 
@@ -226,6 +225,7 @@ function App() {
 
     async function AllUsers() {
         try {
+            setErrorMessage()
             console.log("Start try/catch allUsers")
             console.log("jwtkey: ", jwtToken)
 
@@ -241,7 +241,6 @@ function App() {
             const test = response.data
 
 
-
             console.log("test: ", test)
             setAllUsersData(response.data)
 
@@ -255,11 +254,11 @@ function App() {
     }
 
 
-
     async function AllAuthorities() {
         try {
             console.log("Start try/catch AllAuthorities")
             console.log("jwtkey: ", jwtToken)
+            setErrorMessage()
 
 
             const response = await axios.get(`http://localhost:8080/users/authorities`, {
@@ -271,11 +270,11 @@ function App() {
             })
 
 
-            console.log("authorities: ",response)
+            console.log("authorities: ", response)
 
             // hier eerst een nieuwe map gemaakt, zou in html gedeelte ook met mapping in mapping moeten kunnen.
 
-            setAllAuthoritiesData(response.data.map((user)=>user.authorities).flat())
+            setAllAuthoritiesData(response.data.map((user) => user.authorities).flat())
 
         } catch (error) {
             // setError(error.message);
@@ -286,28 +285,24 @@ function App() {
     }
 
 
-
-
-
-
-
-
     async function AddUser() {
 
 
         const dataNewUser = {
+            // usernameAddUser staat in const rij bovenaan
             username: usernameAddUser,
             password: "1234567",
             enabled: "true"
         };
 
         try {
+
+            setErrorMessage()
             console.log("Start try/catch adduser")
 
             const response = await axios.post(`http://localhost:8080/users`, dataNewUser, {
                 headers: {
                     "Content-Type": "application/json",
-                    // Authorization: `Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwZXRlciIsImV4cCI6MTYyMDQ5OTU4MSwiaWF0IjoxNjE5NjM1NTgxfQ.oVLhAcJRDQBWggIolH1CaNInMW-aN_Uz9f462ciXt9E`
                     Authorization: `Bearer ${jwtToken}`, /*BACK TICK!!!!!*/
                 }
             })
@@ -316,8 +311,8 @@ function App() {
 
         } catch (error) {
             // setError(error.message);
-            setError("Er is iets mis gegaan met het ophalen");
-            console.error(error);
+            setErrorMessage(error.response)
+            console.error(error.response.data);
         }
 
     }
@@ -328,11 +323,12 @@ function App() {
 
         const dataNewUser = {
             username: usernameAddUser,
-            authority:"ROLE_USER",
+            authority: "ROLE_USER",
 
         };
 
         try {
+            setErrorMessage()
             console.log("Start try/catch AddUserAuthorityRoleUser")
 
             const response = await axios.post(`http://localhost:8080/users/${usernameAddUser}/authorities`, dataNewUser, {
@@ -354,8 +350,6 @@ function App() {
     }
 
 
-
-
     async function ChangeUser() {
 
 
@@ -367,6 +361,7 @@ function App() {
         };
 
         try {
+            setErrorMessage()
             console.log("Start try/catch addUser")
             console.log("dataNewUser: ", dataNewUser)
 
@@ -394,6 +389,7 @@ function App() {
 
 
         try {
+            setErrorMessage()
             console.log("Start try/catch deleteUser")
             console.log("jwt:", jwtToken)
 
@@ -477,8 +473,6 @@ function App() {
             </div>
 
 
-
-
             <div className="allUsers">
                 <button
                     type="button"
@@ -502,12 +496,6 @@ function App() {
             </div>
 
 
-
-
-
-
-
-
             <div className="peter">
                 <button
                     type="button"
@@ -527,15 +515,18 @@ function App() {
                 >
                     Add new user <span>{usernameAddUser}</span>
                 </button>
+
+                {errorMessage && <div className="error">{errorMessage.data}</div>}
+                {errorMessage && <div className="error">Http status: {errorMessage.status}</div>}
+
+
             </div>
-
-
 
 
             <div className="addUserAuthorityRoleUse">
                 <button
                     type="button"
-                    onClick={ handleClickAddUserAuthorityRoleUser}
+                    onClick={handleClickAddUserAuthorityRoleUser}
                 >
                     Add ROLE_USER to authority <span>{usernameAddUser}</span>
                 </button>
