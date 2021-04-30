@@ -2,6 +2,8 @@ import React, {useState, useEffect} from 'react';
 import './App.css';
 import axios from 'axios';
 import jwt_decode from 'jwt-decode';
+import { v4 as uuidv4 } from 'uuid';
+
 
 function App() {
 
@@ -238,6 +240,8 @@ function App() {
 
             const test = response.data
 
+
+
             console.log("test: ", test)
             setAllUsersData(response.data)
 
@@ -268,11 +272,10 @@ function App() {
 
 
             console.log("authorities: ",response)
-            console.log()
-            const test = response.data
 
+            // hier eerst een nieuwe map gemaakt, zou in html gedeelte ook met mapping in mapping moeten kunnen.
 
-            setAllAuthoritiesData(response.data)
+            setAllAuthoritiesData(response.data.map((user)=>user.authorities).flat())
 
         } catch (error) {
             // setError(error.message);
@@ -489,7 +492,7 @@ function App() {
                     {allAuthoritiesData &&
                     <ul>
                         {allAuthoritiesData.map((user) => {
-                            return <li key={user.username}> username: {user.username}
+                            return <li key={uuidv4()}> username: {user.username}{user.authority}
                                 {/*<div> password: {user.password}</div>*/}
                             </li>
                         })}
