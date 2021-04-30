@@ -65,20 +65,20 @@ function App() {
     }
 
 
-    function handleClickAddUser() {
+    function handleClickCreateUser() {
         console.log("handleclick AddUser")
         if (jwtToken) {
-            AddUser();
+            CreateUser();
         } else {
             console.log("geen token")
         }
         ;
     }
 
-    function handleClickAddUserAuthorityRoleUser() {
+    function handleClickCreateUserAuthorityRoleUser() {
         console.log("handleclick AddUserAuthorityRoleUser")
         if (jwtToken) {
-            AddUserAuthorityRoleUser();
+           CreateUserAuthorityRoleUser();
         } else {
             console.log("geen token")
         }
@@ -285,7 +285,7 @@ function App() {
     }
 
 
-    async function AddUser() {
+    async function CreateUser() {
 
 
         const dataNewUser = {
@@ -318,7 +318,7 @@ function App() {
     }
 
 
-    async function AddUserAuthorityRoleUser() {
+    async function CreateUserAuthorityRoleUser() {
 
 
         const dataNewUser = {
@@ -508,10 +508,10 @@ function App() {
             </div>
 
 
-            <div className="addUser">
+            <div className="createUser">
                 <button
                     type="button"
-                    onClick={handleClickAddUser}
+                    onClick={handleClickCreateUser}
                 >
                     Add new user <span>{usernameAddUser}</span>
                 </button>
@@ -523,10 +523,10 @@ function App() {
             </div>
 
 
-            <div className="addUserAuthorityRoleUse">
+            <div className="createUserAuthorityRoleUse">
                 <button
                     type="button"
-                    onClick={handleClickAddUserAuthorityRoleUser}
+                    onClick={handleClickCreateUserAuthorityRoleUser}
                 >
                     Add ROLE_USER to authority <span>{usernameAddUser}</span>
                 </button>
