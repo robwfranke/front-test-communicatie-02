@@ -2,7 +2,7 @@
     width: 200px;
 }
 .error{
-    font-size: 15px;
+    font-size: 10px;
     background-color: red;
     color: black;
 
@@ -12,6 +12,7 @@
 
     padding: 20px;
     background-color: red;
+    font-size: 10px;
 }
 
 .base{
@@ -23,6 +24,7 @@
 .peter{
     padding: 20px;
     background-color: coral;
+    font-size: 10px;
 }
 
 
